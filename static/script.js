@@ -3,6 +3,7 @@ let url = 'https://opentdb.com/api.php?amount=10&category=23&difficulty=easy&typ
 startBtn =  document.querySelector('#play');
 highScroreBtn =  document.querySelector('#high-score');
 
+
 let scores = JSON.parse(localStorage.getItem('scores'));
 
 var questionClassArray =[];
@@ -30,6 +31,16 @@ var questionCount = {
     'count': 1,
 };
 
+
+randomize = (array) => {
+    for (var i = array.length-1; i>0; i--){
+        var j = Math.floor(Math.random() * (i+1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+}
+
 checkanswer = (questionObject, selectedOption) => {
     if (selectedOption === questionObject.correctAnswer){
         tempPlayer.score += 10;
@@ -49,7 +60,14 @@ checkanswer = (questionObject, selectedOption) => {
     console.log(tempPlayer);
 }
 
+
+
 displayHTML = (questionObject, player) =>{
+
+    let sequence = [0,1,2,3]
+    randomize(sequence);
+    console.log(sequence)
+
     console.log('hh', questionObject);
     mainContainer.innerHTML =  `     <div class="row h-100 align-items-center">` +
 `    <div class="col-sm-12 col-lg-6 offset-lg-3 display-col">` +
@@ -68,10 +86,10 @@ displayHTML = (questionObject, player) =>{
 `        <div class="row">`+
 `            <div class="col-12">`+
 `            <p class="question"> ${questionObject.q}</p>`+
-`            <p class="option-p"><button class="btn btn-primary option-btn" value = "${questionObject.options[0]}">A</button>${questionObject.options[0]}</p>`+
-`            <p class="option-p"><button class="btn btn-primary option-btn" value = "${questionObject.options[1]}">B</button>${questionObject.options[1]}</p>`+
-`            <p class="option-p"><button class="btn btn-primary option-btn" value = "${questionObject.options[2]}">C</button>${questionObject.options[2]}</p>`+
-`            <p class="option-p"><button class="btn btn-primary option-btn" value = "${questionObject.options[3]}">D</button>${questionObject.options[3]}</p>`+
+`            <p class="option-p"><button class="btn btn-primary option-btn" value = "${questionObject.options[sequence[0]]}">A</button>${questionObject.options[sequence[0]]}</p>`+
+`            <p class="option-p"><button class="btn btn-primary option-btn" value = "${questionObject.options[sequence[1]]}">B</button>${questionObject.options[sequence[1]]}</p>`+
+`            <p class="option-p"><button class="btn btn-primary option-btn" value = "${questionObject.options[sequence[2]]}">C</button>${questionObject.options[sequence[2]]}</p>`+
+`            <p class="option-p"><button class="btn btn-primary option-btn" value = "${questionObject.options[sequence[3]]}">D</button>${questionObject.options[sequence[3]]}</p>`+
 `            </div>`+
 `        </div>`+
 `    </div>`+
@@ -118,7 +136,6 @@ endGame = () => {
     input.addEventListener('input' ,()=> {
         console.log(input.value);
         if (input.value !== ""){
-
             saveScroeBtn.classList.remove('disabled');
 
         } else if (input.value === ""){
@@ -143,7 +160,12 @@ myFormValidation = (e) => {
 
     } else {
         tempPlayer.name = input.value;
-        scores.push(tempPlayer);
+        if (scores === null){
+            scores = [];
+            scores.push(tempPlayer);
+        }else {
+            scores.push(tempPlayer);
+        }
         localStorage.setItem('scores', JSON.stringify(scores));
     }
 
