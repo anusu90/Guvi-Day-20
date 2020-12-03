@@ -77,6 +77,8 @@ displayHTML = (questionObject, player) =>{
 `    </div>`+
 `</div>`
 
+    document.getElementById('prog-inner-bar').style.width = String(questionCount.count * 10)+'%';
+
     optionBtns = document.querySelectorAll('.option-btn').forEach((btn) => {
         btn.addEventListener('click' ,(e)=> {
             console.log(e.target.value);
@@ -94,7 +96,8 @@ endGame = () => {
     `            <form action="index.html" id = "myform">`+
     `                <label for="username"></label>`+
     `                <input type="text" name="username" id="username" placeholder ="username">`+
-    `                <button type="submit" class="btn btn-primary w-100 end-button" id="saveScroeBtn">Save</button>`+
+    `                <small class = "errormessage" id="errormessage">To save, please enter username</small>`+
+    `                <button type="submit" class="btn btn-primary w-100 end-button disabled" id="saveScroeBtn">Save</button>`+
     `            </form>`+
     `            <a href="index.html"><button class="btn btn-primary w-100 end-button" id="goHome">Home</button></a>`+
     `            <button class="btn btn-primary w-100 end-button" id="playAgain">Play Again</button>`+
@@ -110,15 +113,34 @@ endGame = () => {
         myFormValidation(e);
     })
 
+    input = document.getElementById('username');
+    saveScroeBtn= document.getElementById('saveScroeBtn');
+    input.addEventListener('input' ,()=> {
+        console.log(input.value);
+        if (input.value !== ""){
+
+            saveScroeBtn.classList.remove('disabled');
+
+        } else if (input.value === ""){
+
+            saveScroeBtn.classList.remove('disabled');
+
+        }        
+    })
+
 }
 
 myFormValidation = (e) => {
     input = document.getElementById('username');
+    errorMessage = document.getElementById('errormessage');
 
     if (input.value === '' || input.value === null ){
         e.preventDefault();
         console.log(e);
         console.log(tempPlayer)
+        input.style.border ="solid 2px red";
+        errorMessage.style.visibility = 'visible';
+
     } else {
         tempPlayer.name = input.value;
         scores.push(tempPlayer);

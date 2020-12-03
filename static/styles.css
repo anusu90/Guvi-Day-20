@@ -40,3 +40,21 @@ body{
 .end-button{
     margin: 5px auto;
 }
+
+#username{
+    width:98%;
+    border-radius: 5px;
+    display: block;
+}
+
+.errormessage{
+    visibility: hidden;
+    font-size: 12px;
+    color: tomato;
+}
+
+#score{
+    text-align: center;
+    font-size: 12px;
+    color: rebeccapurple;
+}
