@@ -1,0 +1,22 @@
+html{
+    height: 100%;
+}
+
+body{
+    height: 100%;
+}
+
+.my-progress-bar{
+    width: 10%;
+}
+
+.option-btn{
+
+    margin-right: 5px;
+
+}
+
+.option-p{
+    border: steelblue solid 1px;
+    border-radius: 5px;
+}
