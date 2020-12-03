@@ -21,10 +21,22 @@ body{
     border-radius: 5px;
 }
 
-/* .display-col{
+.display-col>h3,h4{
     text-align: center;
-} */
+}
+
+.display-score>p{
+    text-align: end;
+}
 
 .final-col{
     text-align: center;
+}
+
+.init-button{
+    margin: 5px auto;
+}
+
+.end-button{
+    margin: 5px auto;
 }

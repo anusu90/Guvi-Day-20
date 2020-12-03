@@ -3,6 +3,8 @@ let url = 'https://opentdb.com/api.php?amount=10&category=23&difficulty=easy&typ
 startBtn =  document.querySelector('#play');
 highScroreBtn =  document.querySelector('#high-score');
 
+let scores = JSON.parse(localStorage.getItem('scores'));
+
 var questionClassArray =[];
 var playerClassArray = [];
 var globalQuesdata;
@@ -41,7 +43,7 @@ checkanswer = (questionObject, selectedOption) => {
         console.log(questionCount);
         displayHTML(questionClassArray[questionCount.count - 1], tempPlayer, questionCount.count);
     } else {
-        console.log('it is the end')
+        endGame();
     }
 
     console.log(tempPlayer);
@@ -58,7 +60,7 @@ displayHTML = (questionObject, player) =>{
 `                <div class="progress-bar my-progress-bar" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" id="prog-inner-bar"></div>`+
 `            </div>`+
 `            </div>`+
-`           <div class="col-6 justify-content-end">`+
+`           <div class="col-6 display-score">`+
 `            <p>Score</p>`+
 `            <p>${player.score}</p>`+
 `            </div>`+
@@ -81,6 +83,62 @@ displayHTML = (questionObject, player) =>{
             checkanswer(questionObject,e.target.value);
         })
     })
+
+}
+
+endGame = () => {
+
+    mainContainer.innerHTML = `    <div class="row h-50 align-items-center">`+
+    `        <div class="col-sm-12 col-lg-6 offset-lg-3 final-col">`+
+    `            <h4> ${tempPlayer.score}</h4>`+
+    `            <form action="index.html" id = "myform">`+
+    `                <label for="username"></label>`+
+    `                <input type="text" name="username" id="username" placeholder ="username">`+
+    `                <button type="submit" class="btn btn-primary w-100 end-button" id="saveScroeBtn">Save</button>`+
+    `            </form>`+
+    `            <a href="index.html"><button class="btn btn-primary w-100 end-button" id="goHome">Home</button></a>`+
+    `            <button class="btn btn-primary w-100 end-button" id="playAgain">Play Again</button>`+
+    `        </div>`+
+    `    </div>`
+
+    playAgainBtn=document.getElementById('playAgain');
+    playAgainBtn.addEventListener('click', () => {
+        startGame(url);
+    })
+
+    document.getElementById('myform').addEventListener('submit', (e)=>{
+        myFormValidation(e);
+    })
+
+}
+
+myFormValidation = (e) => {
+    input = document.getElementById('username');
+
+    if (input.value === '' || input.value === null ){
+        e.preventDefault();
+        console.log(e);
+        console.log(tempPlayer)
+    } else {
+        tempPlayer.name = input.value;
+        scores.push(tempPlayer);
+        localStorage.setItem('scores', JSON.stringify(scores));
+    }
+
+}
+
+
+displayHighScore = () => {
+
+    let scores = JSON.parse(localStorage.getItem('scores'));
+    arrayPlayer = [], arrayScores = [];
+    for (var x of scores){
+        arrayPlayer.push(x.name);
+        arrayScores.push(x.score);
+    }
+    maxScore = Math.max(...arrayScores);
+    console.log(maxScore, arrayScores.indexOf(maxScore), arrayPlayer[arrayScores.indexOf(maxScore)]);
+    document.getElementById('score').innerHTML =  `The highest score is ${maxScore} and was scored by ${arrayPlayer[arrayScores.indexOf(maxScore)]}`
 
 }
 
@@ -108,3 +166,5 @@ async function startGame (url) {
 startBtn.addEventListener('click', ()=>{
     startGame(url);
 })
+
+highScroreBtn.addEventListener('click', displayHighScore);
